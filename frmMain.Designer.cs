@@ -32,11 +32,11 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.beginSortingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.folderSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.beginSortingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btnSkip = new System.Windows.Forms.Button();
             this.btnSort1 = new System.Windows.Forms.Button();
             this.btnSort2 = new System.Windows.Forms.Button();
@@ -48,19 +48,25 @@
             this.btnSort8 = new System.Windows.Forms.Button();
             this.btnSort9 = new System.Windows.Forms.Button();
             this.btnSort10 = new System.Windows.Forms.Button();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
             // 
+            this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.settingToolStripMenuItem,
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(883, 24);
+            this.menuStrip1.Padding = new System.Windows.Forms.Padding(9, 3, 0, 3);
+            this.menuStrip1.Size = new System.Drawing.Size(1324, 35);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -70,35 +76,42 @@
             this.exitToolStripMenuItem,
             this.beginSortingToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(50, 29);
             this.fileToolStripMenuItem.Text = "&File";
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(252, 30);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItem_Click);
+            // 
+            // beginSortingToolStripMenuItem
+            // 
+            this.beginSortingToolStripMenuItem.Name = "beginSortingToolStripMenuItem";
+            this.beginSortingToolStripMenuItem.Size = new System.Drawing.Size(252, 30);
+            this.beginSortingToolStripMenuItem.Text = "&Begin Sorting";
+            this.beginSortingToolStripMenuItem.Click += new System.EventHandler(this.BeginSortingToolStripMenuItem_Click);
             // 
             // settingToolStripMenuItem
             // 
             this.settingToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.folderSettingsToolStripMenuItem});
             this.settingToolStripMenuItem.Name = "settingToolStripMenuItem";
-            this.settingToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
+            this.settingToolStripMenuItem.Size = new System.Drawing.Size(80, 29);
             this.settingToolStripMenuItem.Text = "&Setting";
             // 
             // folderSettingsToolStripMenuItem
             // 
             this.folderSettingsToolStripMenuItem.Name = "folderSettingsToolStripMenuItem";
-            this.folderSettingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.folderSettingsToolStripMenuItem.Size = new System.Drawing.Size(215, 30);
             this.folderSettingsToolStripMenuItem.Text = "F&older Settings";
             this.folderSettingsToolStripMenuItem.Click += new System.EventHandler(this.FolderSettingsToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(61, 29);
             this.helpToolStripMenuItem.Text = "&Help";
             // 
             // pictureBox1
@@ -108,24 +121,20 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBox1.InitialImage = null;
-            this.pictureBox1.Location = new System.Drawing.Point(129, 27);
+            this.pictureBox1.Location = new System.Drawing.Point(194, 42);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(742, 411);
+            this.pictureBox1.Size = new System.Drawing.Size(1112, 671);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 1;
             this.pictureBox1.TabStop = false;
             // 
-            // beginSortingToolStripMenuItem
-            // 
-            this.beginSortingToolStripMenuItem.Name = "beginSortingToolStripMenuItem";
-            this.beginSortingToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.beginSortingToolStripMenuItem.Text = "&Begin Sorting";
-            this.beginSortingToolStripMenuItem.Click += new System.EventHandler(this.BeginSortingToolStripMenuItem_Click);
-            // 
             // btnSkip
             // 
-            this.btnSkip.Location = new System.Drawing.Point(12, 37);
+            this.btnSkip.Location = new System.Drawing.Point(18, 57);
+            this.btnSkip.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnSkip.Name = "btnSkip";
-            this.btnSkip.Size = new System.Drawing.Size(111, 27);
+            this.btnSkip.Size = new System.Drawing.Size(166, 42);
             this.btnSkip.TabIndex = 2;
             this.btnSkip.Text = "Skip Image";
             this.btnSkip.UseVisualStyleBackColor = true;
@@ -134,9 +143,10 @@
             // 
             // btnSort1
             // 
-            this.btnSort1.Location = new System.Drawing.Point(12, 70);
+            this.btnSort1.Location = new System.Drawing.Point(18, 108);
+            this.btnSort1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnSort1.Name = "btnSort1";
-            this.btnSort1.Size = new System.Drawing.Size(111, 27);
+            this.btnSort1.Size = new System.Drawing.Size(166, 42);
             this.btnSort1.TabIndex = 3;
             this.btnSort1.Text = "btnSort1";
             this.btnSort1.UseVisualStyleBackColor = true;
@@ -145,9 +155,10 @@
             // 
             // btnSort2
             // 
-            this.btnSort2.Location = new System.Drawing.Point(12, 103);
+            this.btnSort2.Location = new System.Drawing.Point(18, 158);
+            this.btnSort2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnSort2.Name = "btnSort2";
-            this.btnSort2.Size = new System.Drawing.Size(111, 27);
+            this.btnSort2.Size = new System.Drawing.Size(166, 42);
             this.btnSort2.TabIndex = 4;
             this.btnSort2.Text = "btnSort2";
             this.btnSort2.UseVisualStyleBackColor = true;
@@ -156,9 +167,10 @@
             // 
             // btnSort3
             // 
-            this.btnSort3.Location = new System.Drawing.Point(12, 136);
+            this.btnSort3.Location = new System.Drawing.Point(18, 209);
+            this.btnSort3.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnSort3.Name = "btnSort3";
-            this.btnSort3.Size = new System.Drawing.Size(111, 27);
+            this.btnSort3.Size = new System.Drawing.Size(166, 42);
             this.btnSort3.TabIndex = 5;
             this.btnSort3.Text = "btnSort3";
             this.btnSort3.UseVisualStyleBackColor = true;
@@ -167,9 +179,10 @@
             // 
             // btnSort4
             // 
-            this.btnSort4.Location = new System.Drawing.Point(12, 169);
+            this.btnSort4.Location = new System.Drawing.Point(18, 260);
+            this.btnSort4.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnSort4.Name = "btnSort4";
-            this.btnSort4.Size = new System.Drawing.Size(111, 27);
+            this.btnSort4.Size = new System.Drawing.Size(166, 42);
             this.btnSort4.TabIndex = 6;
             this.btnSort4.Text = "btnSort4";
             this.btnSort4.UseVisualStyleBackColor = true;
@@ -178,9 +191,10 @@
             // 
             // btnSort5
             // 
-            this.btnSort5.Location = new System.Drawing.Point(12, 202);
+            this.btnSort5.Location = new System.Drawing.Point(18, 311);
+            this.btnSort5.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnSort5.Name = "btnSort5";
-            this.btnSort5.Size = new System.Drawing.Size(111, 27);
+            this.btnSort5.Size = new System.Drawing.Size(166, 42);
             this.btnSort5.TabIndex = 7;
             this.btnSort5.Text = "btnSort5";
             this.btnSort5.UseVisualStyleBackColor = true;
@@ -189,9 +203,10 @@
             // 
             // btnSort6
             // 
-            this.btnSort6.Location = new System.Drawing.Point(12, 235);
+            this.btnSort6.Location = new System.Drawing.Point(18, 362);
+            this.btnSort6.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnSort6.Name = "btnSort6";
-            this.btnSort6.Size = new System.Drawing.Size(111, 27);
+            this.btnSort6.Size = new System.Drawing.Size(166, 42);
             this.btnSort6.TabIndex = 8;
             this.btnSort6.Text = "btnSort6";
             this.btnSort6.UseVisualStyleBackColor = true;
@@ -200,9 +215,10 @@
             // 
             // btnSort7
             // 
-            this.btnSort7.Location = new System.Drawing.Point(12, 268);
+            this.btnSort7.Location = new System.Drawing.Point(18, 412);
+            this.btnSort7.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnSort7.Name = "btnSort7";
-            this.btnSort7.Size = new System.Drawing.Size(111, 27);
+            this.btnSort7.Size = new System.Drawing.Size(166, 42);
             this.btnSort7.TabIndex = 9;
             this.btnSort7.Text = "btnSort7";
             this.btnSort7.UseVisualStyleBackColor = true;
@@ -211,9 +227,10 @@
             // 
             // btnSort8
             // 
-            this.btnSort8.Location = new System.Drawing.Point(12, 301);
+            this.btnSort8.Location = new System.Drawing.Point(18, 463);
+            this.btnSort8.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnSort8.Name = "btnSort8";
-            this.btnSort8.Size = new System.Drawing.Size(111, 27);
+            this.btnSort8.Size = new System.Drawing.Size(166, 42);
             this.btnSort8.TabIndex = 10;
             this.btnSort8.Text = "btnSort8";
             this.btnSort8.UseVisualStyleBackColor = true;
@@ -222,9 +239,10 @@
             // 
             // btnSort9
             // 
-            this.btnSort9.Location = new System.Drawing.Point(12, 334);
+            this.btnSort9.Location = new System.Drawing.Point(18, 514);
+            this.btnSort9.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnSort9.Name = "btnSort9";
-            this.btnSort9.Size = new System.Drawing.Size(111, 27);
+            this.btnSort9.Size = new System.Drawing.Size(166, 42);
             this.btnSort9.TabIndex = 11;
             this.btnSort9.Text = "btnSort9";
             this.btnSort9.UseVisualStyleBackColor = true;
@@ -233,20 +251,48 @@
             // 
             // btnSort10
             // 
-            this.btnSort10.Location = new System.Drawing.Point(12, 367);
+            this.btnSort10.Location = new System.Drawing.Point(18, 565);
+            this.btnSort10.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnSort10.Name = "btnSort10";
-            this.btnSort10.Size = new System.Drawing.Size(111, 27);
+            this.btnSort10.Size = new System.Drawing.Size(166, 42);
             this.btnSort10.TabIndex = 12;
             this.btnSort10.Text = "btnSort10";
             this.btnSort10.UseVisualStyleBackColor = true;
             this.btnSort10.Visible = false;
             this.btnSort10.Click += new System.EventHandler(this.BtnSort10_Click);
             // 
+            // statusStrip1
+            // 
+            this.statusStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel1,
+            this.toolStripStatusLabel2});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 721);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(1324, 30);
+            this.statusStrip1.TabIndex = 13;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(179, 25);
+            this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
+            // 
+            // toolStripStatusLabel2
+            // 
+            this.toolStripStatusLabel2.AutoSize = false;
+            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(500, 25);
+            this.toolStripStatusLabel2.Text = "toolStripStatusLabel2";
+            this.toolStripStatusLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // frmMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(883, 450);
+            this.ClientSize = new System.Drawing.Size(1324, 751);
+            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.btnSort10);
             this.Controls.Add(this.btnSort9);
             this.Controls.Add(this.btnSort8);
@@ -262,11 +308,15 @@
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "frmMain";
             this.Text = "Image Sorter (v0.1a)";
+            this.Load += new System.EventHandler(this.frmMain_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -293,6 +343,9 @@
         private System.Windows.Forms.Button btnSort8;
         private System.Windows.Forms.Button btnSort9;
         private System.Windows.Forms.Button btnSort10;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
     }
 }
 

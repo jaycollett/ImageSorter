@@ -15,8 +15,8 @@ namespace ImageSorter
     public partial class frmMain : Form
     {
         private List<string> unsortedImageFiles;
-        private int imageListCurrentPos;
-        private List<MemoryStream> imagesCache;
+        private int precacheCurrentPostionOnImageList;
+        private List<ImageCacheObject> imageCacheObjectList;
 
         public frmMain()
         {
@@ -52,7 +52,9 @@ namespace ImageSorter
 
             // load images from the unsorted path
             this.toolStripStatusLabel2.Text = $"Loading images from {ConfigurationManager.AppSettings["UnsortedImagesPath"]}";
-            LoadImages();
+
+            imageCacheObjectList = new List<ImageCacheObject>();
+            _ = LoadImageListAsync();
 
             if (unsortedImageFiles.Count<string>() <= 0)
             {
@@ -79,14 +81,12 @@ namespace ImageSorter
             }
 
             // load the first image to kick off the sorting...
-            LoadNextImage();
+            _ = LoadNextImage();
         }
 
-        private void LoadImages()
+        private async Task LoadImageListAsync()
         {
-            imagesCache = new List<MemoryStream>();
-
-            imageListCurrentPos = 0;
+            precacheCurrentPostionOnImageList = 0;
             unsortedImageFiles = Directory.EnumerateFiles(ConfigurationManager.AppSettings["UnsortedImagesPath"], "*.*", SearchOption.AllDirectories)
              .Where(s => s.EndsWith(".jpg")
                      || s.EndsWith(".jpeg")
@@ -96,19 +96,31 @@ namespace ImageSorter
                      || s.EndsWith(".jfif")
              ).ToList();
 
+            await PopulateImagePrecache();
+        }
+
+        private async Task PopulateImagePrecache()
+        {
             // now load the first x (specified by user) images into a memory stream list
-            for(int t = 0; t < 10; t++)
+            for (int t = 0; t < 10; t++)
             {
-                imagesCache.Add(new MemoryStream(File.ReadAllBytes(unsortedImageFiles[t])));
-                imageListCurrentPos++;
+                ImageCacheObject tmp = new ImageCacheObject
+                {
+                    imageMemoryStream = new MemoryStream(File.ReadAllBytes(unsortedImageFiles[t])),
+                    imagePath = unsortedImageFiles[t]
+                };
+
+                imageCacheObjectList.Add(tmp);
+                precacheCurrentPostionOnImageList++;
             }
         }
 
+      
         private async Task<bool> LoadNextImage()
         {
-            if (imageListCurrentPos >= unsortedImageFiles.Count)
+            if (imageCacheObjectList.Count <=0)
             {
-                this.pictureBox1.ImageLocation = "";
+                this.pictureBox1.Image = null;
                 this.toolStripStatusLabel2.Text = "";
                 ///TODO: clean up this message
                 MessageBox.Show("No more images to show...");
@@ -119,32 +131,16 @@ namespace ImageSorter
             }
             else
             {
-                // show image from cache
-                ///TODO: load image from cache to picturebox
-                ///
-
                 // load next image from memory stream array
-                this.toolStripStatusLabel2.Text = $"Loading image: {unsortedImageFiles[imageListCurrentPos]}";
-                this.pictureBox1.Image = Image.FromStream(imagesCache.FirstOrDefault<MemoryStream>());
-                imagesCache.RemoveAt(0);
-                this.toolStripStatusLabel2.Text = $"Image loaded: {unsortedImageFiles[imageListCurrentPos]}";
-                imageListCurrentPos++;
+                
+                this.toolStripStatusLabel2.Text = $"{imageCacheObjectList.FirstOrDefault().imagePath}";
+                this.pictureBox1.Image = Image.FromStream(imageCacheObjectList.FirstOrDefault().imageMemoryStream);
+                imageCacheObjectList.RemoveAt(0);
 
-                await LoadCache();
+                if(imageCacheObjectList.Count <= 5)
+                    await PopulateImagePrecache();
             }
             return true;
-        }
-
-        private Task<bool> LoadCache()
-        {
-            while (imagesCache.Count < 10)
-            {
-                imagesCache.Add(new MemoryStream(File.ReadAllBytes(unsortedImageFiles[imageListCurrentPos])));
-                imageListCurrentPos++;
-                return Task.FromResult<bool>(true);
-            }
-
-            return Task.FromResult<bool>(false);
         }
 
         private void MoveImage(string frompath, string toPath)
@@ -159,7 +155,8 @@ namespace ImageSorter
                 MessageBox.Show(exp.ToString());
             }
         }
-        private void MoveAndLoadNextImage(int sortedFolderNumber)
+
+        private void MoveAndLoadNextImageAsync(int sortedFolderNumber)
         {
             // update cursor to let user know we are trying to move or load next image (may be slow on some network shares/machines
             this.Cursor = Cursors.WaitCursor;
@@ -167,73 +164,81 @@ namespace ImageSorter
             this.btnSkip.Enabled = false;
 
             ///TODO: probably need to load these in memory as var and stop reading it over and over
-            string newFullpath = ConfigurationManager.AppSettings[$"SortFolderPath{sortedFolderNumber}"] + "\\" + Path.GetFileName(this.pictureBox1.ImageLocation);
-            MoveImage(this.pictureBox1.ImageLocation, newFullpath);
-            LoadNextImage();
+            string newFullpath = ConfigurationManager.AppSettings[$"SortFolderPath{sortedFolderNumber}"] + "\\" + Path.GetFileName(this.toolStripStatusLabel2.Text);
+            MoveImage(this.toolStripStatusLabel2.Text, newFullpath);
+            _ = LoadNextImage();
             this.Cursor = Cursors.Default;
             this.btnSkip.Enabled = true;
             this.btnSkip.Text = "Skip Image";
-
         }
+
+
 
         private void BtnSkip_Click(object sender, EventArgs e)
         {
             // user want's to skip sorting this image, remove it from list and load next image
-            LoadNextImage();
+            _ = LoadNextImage();
         }
+
         private void BtnSort1_Click(object sender, EventArgs e)
         {
-            MoveAndLoadNextImage(1);
+            MoveAndLoadNextImageAsync(1);
         }
 
         private void BtnSort2_Click(object sender, EventArgs e)
         {
-            MoveAndLoadNextImage(2);
+            MoveAndLoadNextImageAsync(2);
         }
 
         private void BtnSort3_Click(object sender, EventArgs e)
         {
-            MoveAndLoadNextImage(3);
+            MoveAndLoadNextImageAsync(3);
         }
 
         private void BtnSort4_Click(object sender, EventArgs e)
         {
-            MoveAndLoadNextImage(4);
+            MoveAndLoadNextImageAsync(4);
         }
 
         private void BtnSort5_Click(object sender, EventArgs e)
         {
-            MoveAndLoadNextImage(5);
+            MoveAndLoadNextImageAsync(5);
         }
 
         private void BtnSort6_Click(object sender, EventArgs e)
         {
-            MoveAndLoadNextImage(6);
+            MoveAndLoadNextImageAsync(6);
         }
 
         private void BtnSort7_Click(object sender, EventArgs e)
         {
-            MoveAndLoadNextImage(7);
+            MoveAndLoadNextImageAsync(7);
         }
 
         private void BtnSort8_Click(object sender, EventArgs e)
         {
-            MoveAndLoadNextImage(8);
+            MoveAndLoadNextImageAsync(8);
         }
 
         private void BtnSort9_Click(object sender, EventArgs e)
         {
-            MoveAndLoadNextImage(9);
+            MoveAndLoadNextImageAsync(9);
         }
 
         private void BtnSort10_Click(object sender, EventArgs e)
         {
-            MoveAndLoadNextImage(10);
+            MoveAndLoadNextImageAsync(10);
         }
 
         private void frmMain_Load(object sender, EventArgs e)
         {
 
         }
+    }
+
+    public class ImageCacheObject
+    {
+        public MemoryStream imageMemoryStream { get; set; }
+        public string imagePath { get; set; }
     }
 }

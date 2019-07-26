@@ -35,7 +35,7 @@ namespace ImageSorter
             settingsForm.Show();
         }
 
-        private void BeginSortingToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void BeginSortingToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
             // update statusbar
@@ -137,13 +137,26 @@ namespace ImageSorter
             else
             {
                 // load next image from memory stream array
-                
-                this.toolStripStatusLabel2.Text = $"{imageCacheObjectList.FirstOrDefault().imagePath}";
-                this.pictureBox1.Image = Image.FromStream(imageCacheObjectList.FirstOrDefault().imageMemoryStream);
-                imageCacheObjectList.RemoveAt(0);
+                try
+                {
+                    this.pictureBox1.Image = Image.FromStream(imageCacheObjectList.FirstOrDefault().imageMemoryStream);
+                    this.toolStripStatusLabel2.Text = $"{imageCacheObjectList.FirstOrDefault().imagePath}";
+                    imageCacheObjectList.RemoveAt(0);
+                }
+                catch(Exception e)
+                {
+                    //sometimes we have bad images or images that the viewer can't handle, ignore them
+                    ///TODO: skip bad images and rename them so the user knows they are bad/can't be viewed
+                    ///
 
-                if(imageCacheObjectList.Count <= 5)
-                    PopulateImagePrecache();
+                    // remove this object form our list and recursively try again...
+                    imageCacheObjectList.RemoveAt(0);
+                    LoadNextImage();
+
+                }
+
+                if (imageCacheObjectList.Count <= 5)
+                    PopulateImagePrecache(); 
             }
         }
 

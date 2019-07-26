@@ -54,7 +54,7 @@ namespace ImageSorter
             this.toolStripStatusLabel2.Text = $"Loading images from {ConfigurationManager.AppSettings["UnsortedImagesPath"]}";
 
             imageCacheObjectList = new List<ImageCacheObject>();
-            _ = LoadImageListAsync();
+            LoadImageList();
 
             if (unsortedImageFiles.Count<string>() <= 0)
             {
@@ -66,6 +66,7 @@ namespace ImageSorter
 
             this.btnSkip.Visible = true;
             this.beginSortingToolStripMenuItem.Enabled = false;
+
             // loop through all 10 sort folders and populate the paths and labels
             int t = 1;
             for (int i = 1; i <= 10; i++)
@@ -81,10 +82,10 @@ namespace ImageSorter
             }
 
             // load the first image to kick off the sorting...
-            _ = LoadNextImage();
+            LoadNextImage();
         }
 
-        private async Task LoadImageListAsync()
+        private void LoadImageList()
         {
             precacheCurrentPostionOnImageList = 0;
             unsortedImageFiles = Directory.EnumerateFiles(ConfigurationManager.AppSettings["UnsortedImagesPath"], "*.*", SearchOption.AllDirectories)
@@ -96,30 +97,34 @@ namespace ImageSorter
                      || s.EndsWith(".jfif")
              ).ToList();
 
-            await PopulateImagePrecache();
+            PopulateImagePrecache();
         }
 
-        private async Task PopulateImagePrecache()
+        private void PopulateImagePrecache()
         {
-            // now load the first x (specified by user) images into a memory stream list
-            for (int t = 0; t < 10; t++)
+            if (precacheCurrentPostionOnImageList < unsortedImageFiles.Count)
             {
-                ImageCacheObject tmp = new ImageCacheObject
+                // now load the first x (specified by user) images into a memory stream list
+                while(imageCacheObjectList.Count <= 10)
                 {
-                    imageMemoryStream = new MemoryStream(File.ReadAllBytes(unsortedImageFiles[t])),
-                    imagePath = unsortedImageFiles[t]
-                };
+                    ImageCacheObject tmp = new ImageCacheObject
+                    {
+                        imageMemoryStream = new MemoryStream(File.ReadAllBytes(unsortedImageFiles[precacheCurrentPostionOnImageList])),
+                        imagePath = unsortedImageFiles[precacheCurrentPostionOnImageList]
+                    };
 
-                imageCacheObjectList.Add(tmp);
-                precacheCurrentPostionOnImageList++;
+                    imageCacheObjectList.Add(tmp);
+                    precacheCurrentPostionOnImageList++;
+                }
             }
         }
 
       
-        private async Task<bool> LoadNextImage()
+        private void LoadNextImage()
         {
             if (imageCacheObjectList.Count <=0)
             {
+                
                 this.pictureBox1.Image = null;
                 this.toolStripStatusLabel2.Text = "";
                 ///TODO: clean up this message
@@ -138,9 +143,8 @@ namespace ImageSorter
                 imageCacheObjectList.RemoveAt(0);
 
                 if(imageCacheObjectList.Count <= 5)
-                    await PopulateImagePrecache();
+                    PopulateImagePrecache();
             }
-            return true;
         }
 
         private void MoveImage(string frompath, string toPath)
@@ -166,7 +170,7 @@ namespace ImageSorter
             ///TODO: probably need to load these in memory as var and stop reading it over and over
             string newFullpath = ConfigurationManager.AppSettings[$"SortFolderPath{sortedFolderNumber}"] + "\\" + Path.GetFileName(this.toolStripStatusLabel2.Text);
             MoveImage(this.toolStripStatusLabel2.Text, newFullpath);
-            _ = LoadNextImage();
+            LoadNextImage();
             this.Cursor = Cursors.Default;
             this.btnSkip.Enabled = true;
             this.btnSkip.Text = "Skip Image";
@@ -177,7 +181,7 @@ namespace ImageSorter
         private void BtnSkip_Click(object sender, EventArgs e)
         {
             // user want's to skip sorting this image, remove it from list and load next image
-            _ = LoadNextImage();
+            LoadNextImage();
         }
 
         private void BtnSort1_Click(object sender, EventArgs e)

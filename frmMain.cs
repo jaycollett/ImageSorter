@@ -4,11 +4,14 @@ using System.ComponentModel;
 using System.Configuration;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MetadataExtractor;
+using MetadataExtractor.Formats.Exif;
 
 namespace ImageSorter
 {
@@ -43,7 +46,7 @@ namespace ImageSorter
             
 
             // validate the unsorted folder exist and there is at least one image in it
-            if(!Directory.Exists(ConfigurationManager.AppSettings["UnsortedImagesPath"])){
+            if(!System.IO.Directory.Exists(ConfigurationManager.AppSettings["UnsortedImagesPath"])){
                 MessageBox.Show("It appears you have specified a unsorted image folder that does not exist.", "Unsorted Image Folder Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.toolStripStatusLabel1.Text = "IDLE";
                 this.toolStripStatusLabel2.Text = "";
@@ -88,7 +91,7 @@ namespace ImageSorter
         private void LoadImageList()
         {
             precacheCurrentPostionOnImageList = 0;
-            unsortedImageFiles = Directory.EnumerateFiles(ConfigurationManager.AppSettings["UnsortedImagesPath"], "*.*", SearchOption.AllDirectories)
+            unsortedImageFiles = System.IO.Directory.EnumerateFiles(ConfigurationManager.AppSettings["UnsortedImagesPath"], "*.*", SearchOption.AllDirectories)
              .Where(s => s.EndsWith(".jpg")
                      || s.EndsWith(".jpeg")
                      || s.EndsWith(".gif")
@@ -110,7 +113,8 @@ namespace ImageSorter
                     ImageCacheObject tmp = new ImageCacheObject
                     {
                         imageMemoryStream = new MemoryStream(File.ReadAllBytes(unsortedImageFiles[precacheCurrentPostionOnImageList])),
-                        imagePath = unsortedImageFiles[precacheCurrentPostionOnImageList]
+                        imagePath = unsortedImageFiles[precacheCurrentPostionOnImageList],
+                        metaDataDirectories = ImageMetadataReader.ReadMetadata(unsortedImageFiles[precacheCurrentPostionOnImageList])
                     };
 
                     imageCacheObjectList.Add(tmp);
@@ -141,6 +145,9 @@ namespace ImageSorter
                 {
                     this.pictureBox1.Image = Image.FromStream(imageCacheObjectList.FirstOrDefault().imageMemoryStream);
                     this.toolStripStatusLabel2.Text = $"{imageCacheObjectList.FirstOrDefault().imagePath}";
+                    var exifMetaData = imageCacheObjectList.FirstOrDefault().metaDataDirectories.OfType<ExifIfd0Directory>().FirstOrDefault();
+                    this.lblDateTimeTaken.Text = exifMetaData?.GetDescription(ExifDirectoryBase.TagDateTime);
+                    
                     imageCacheObjectList.RemoveAt(0);
                 }
                 catch(Exception e)
@@ -257,5 +264,7 @@ namespace ImageSorter
     {
         public MemoryStream imageMemoryStream { get; set; }
         public string imagePath { get; set; }
+        public IEnumerable<MetadataExtractor.Directory> metaDataDirectories {get;set;}
+
     }
 }
